@@ -1,0 +1,23 @@
+{# 
+  🔹 Archivo: tema_tree.html
+  🔹 Propósito: Renderiza recursivamente la jerarquía de temas y subtemas.
+  🔹 Uso: Este template se incluye dentro del listado principal de temas para mostrar
+         cada tema y sus subtemas anidados, sin límite de profundidad.
+  🔹 Contexto esperado: Se recibe una variable 'tema' (instancia del modelo Tema),
+         y se accede a sus subtemas mediante 'tema.subtemas.all'.
+  🔹 Ejemplo de inclusión:
+         {% include 'chatbot_app/tema_tree.html' with tema=tema %}
+#}
+{# tema_tree.html #}
+{% if nivel|default:0 < 10 %}
+<li>
+  <a href="#" data-id="{{ tema.id_tema }}" class="tema-link">{{ tema.nombre_tema }}</a>
+  {% if tema.subtemas.all %}
+    <ul>
+      {% for subtema in tema.subtemas.all %}
+        {% include 'chatbot_app/tema_tree.html' with tema=subtema nivel=nivel|add:"1" %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+</li>
+{% endif %}

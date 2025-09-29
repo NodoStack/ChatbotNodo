@@ -1,0 +1,12 @@
+{% extends 'chatbot_app/templateBase.html' %}
+
+{% block content %}
+<h2>Eliminar Tema</h2>
+<p>¿Seguro que querés eliminar el tema "{{ tema.nombre_tema }}"?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url 'vista_temas' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

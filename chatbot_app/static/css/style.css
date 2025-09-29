@@ -1,0 +1,46 @@
+/* 🎯 Estilos generales para temas y subtemas */
+.tema-link {
+  color: inherit;
+  text-decoration: none;
+  display: inline-block;
+  transition: color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+/*tema al pasar el mouse */
+.tema-link:hover {
+  color: #32cd32 !important; /* Verde lima */
+  transform: scale(1.05);
+}
+
+.tema-link:hover strong {
+  color: #32cd32 !important;
+}
+
+
+/* ✨ Botones con efecto brillante al pasar el mouse */
+.btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 10px rgba(0, 191, 255, 0.6); /* sombra brillante celeste */
+  transition: all 0.2s ease-in-out;
+}
+
+/* ✅ Transición suave para todos los botones */
+.btn {
+  transition: all 0.2s ease-in-out;
+}
+
+/* 🧹 Toasts flotantes, por si querés personalizarlos también */
+.toast-body {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+/* alto de las cajas de texto */
+input.form-control,
+select.form-control,
+textarea.form-control {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 0.95rem;
+}

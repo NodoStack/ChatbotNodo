@@ -1,0 +1,128 @@
+{% extends 'chatbot_app/templateBase.html' %}
+
+{% block content %}
+<h2>Consultas recientes</h2>
+
+<!-- PANEL DE FILTROS SUPERIOR -->
+<form method="get" class="mb-4 border p-3 rounded shadow-sm bg-light">
+    <div class="row align-items-end g-2">
+        <!-- Buscar por ID -->
+        <div class="col-md-2">
+            <label class="form-label small mb-1">ID</label>
+            <input type="text" name="id" value="{{ filtros.id }}" placeholder="ID"
+                   class="form-control form-control-sm">
+        </div>
+
+        <!-- Buscar por Cliente -->
+        <div class="col-md-2">
+            <label class="form-label small mb-1">Cliente</label>
+            <input type="text" name="cliente" value="{{ filtros.cliente }}" placeholder="Nombre o Apellido"
+                   class="form-control form-control-sm">
+        </div>
+
+        <!-- Filtro por Tema -->
+        <div class="col-md-2">
+            <label class="form-label small mb-1">Tema</label>
+            <select name="tema" class="form-select form-select-sm">
+                <option value="">Todos</option>
+                {% for tema in temas %}
+                    <option value="{{ tema.id_tema }}" {% if filtros.tema == tema.id_tema|stringformat:"s" %}selected{% endif %}>
+                        {{ tema.nombre_tema }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Filtro por Estado -->
+        <div class="col-md-2">
+            <label class="form-label small mb-1">Estado</label>
+            <select name="estado" class="form-select form-select-sm">
+                <option value="">Todos</option>
+                {% for valor, nombre in estados %}
+                    <option value="{{ valor }}" {% if filtros.estado == valor %}selected{% endif %}>
+                        {{ nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Filtro por Tipo 
+        <div class="col-md-2">
+            <label class="form-label small mb-1">Tipo</label>
+            <select name="tipo" class="form-select form-select-sm">
+                <option value="">Todos</option>
+                {% for valor, nombre in tipos %}
+                    <option value="{{ valor }}" {% if filtros.tipo == valor %}selected{% endif %}>
+                        {{ nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>-->
+
+        <!-- Botones de acción -->
+        <div class="col-md-12 text-end mt-2">
+            <button type="submit" class="btn btn-primary btn-sm me-2">
+                <i class="bi bi-search"></i> Filtrar
+            </button>
+            <a href="{% url 'vista_consultas' %}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-eraser"></i> Limpiar
+            </a>
+        </div>
+    </div>
+</form>
+
+<!-- TABLA DE CONSULTAS -->
+<table class="table table-bordered tabldice hola, bienvenidoe-hover">
+    <thead class="table-light">
+        <tr>
+            <th>ID</th>
+            <th>Teléfono</th>
+            <th>Cliente</th>
+            <th>correo</th>
+            <th>Tema</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th>Mensaje</th>
+           
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for consulta in consultas %}
+        <tr>
+            <td>{{ consulta.id_consulta }}</td>
+            <td>
+                {% if consulta.cliente.tel %}
+                   {{ consulta.cliente.tel }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td>{{ consulta.cliente.apellido }} {{ consulta.cliente.nombre }}</td>
+            <td>
+               {% if consulta.cliente.correo %}
+                  {{ consulta.cliente.correo }}
+               {% else %}
+                  -
+            {% endif %}
+            </td>
+            <td>{{ consulta.tema.nombre_tema }}</td>
+            <td>{{ consulta.estado }}</td>
+            <td>{{ consulta.fecha_creacion|date:"d/m/Y H:i" }}</td>
+            <td>
+               {% if consulta.observaciones_usuario and consulta.observaciones_usuario != "Inicio de conversación desde NodoBot" %}
+                   {{ consulta.observaciones_usuario }}
+               {% else %}
+                   -
+                {% endif %}
+            </td>
+            
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="8" class="text-center">No hay consultas registradas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
