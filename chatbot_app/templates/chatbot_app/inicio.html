@@ -1,0 +1,76 @@
+{% extends 'chatbot_app/templateBase.html' %}
+
+{% block content %}
+<!-- TARJETAS -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Consultas hoy</h5>
+                    <h3 class="card-text">{% if consultas_hoy is not None %}{{ consultas_hoy }}{% else %}0{% endif %}</h3>
+                    <i class="bi bi-chat-left-text-fill text-primary fs-2"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Temas activos</h5>
+                    <h3 class="card-text">{{ cantidad_temas }}</h3>
+                    <i class="bi bi-tags-fill text-success fs-2"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Clientes</h5>
+                    <h3 class="card-text">4</h3>
+                    <i class="bi bi-person-badge-fill text-warning fs-2"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--..................................-->
+<div class="container">
+  <h5 class="mt-5">Consultas por día (últimos 7 días)</h5>
+  <canvas id="graficoConsultas" height="100"></canvas>
+
+  <!-- Scripts con JSON puro, fuera de cualquier otro script -->
+  {{ labels|json_script:"labels-data" }}
+  {{ valores|json_script:"valores-data" }}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = JSON.parse(document.getElementById('labels-data').textContent);
+  const valores = JSON.parse(document.getElementById('valores-data').textContent);
+
+  const ctx = document.getElementById('graficoConsultas').getContext('2d');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Cantidad de consultas',
+        data: valores,
+        backgroundColor: 'rgba(13, 110, 253, 0.6)',
+        borderRadius: 6,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { precision: 0 }
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}
